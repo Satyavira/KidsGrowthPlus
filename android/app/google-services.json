@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "911288213854",
+    "project_id": "kidsgrowth-cde91",
+    "storage_bucket": "kidsgrowth-cde91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911288213854:android:d496797504e6ccb2f6afcf",
+        "android_client_info": {
+          "package_name": "com.garpoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRdRg9FxMm3b3WM6tNDfE5fYVXekE4nIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
