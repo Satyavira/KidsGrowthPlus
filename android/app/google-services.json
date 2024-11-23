@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911288213854:android:d496797504e6ccb2f6afcf",
+        "mobilesdk_app_id": "1:911288213854:android:d11aa38d0acef318f6afcf",
         "android_client_info": {
-          "package_name": "com.garpoo"
+          "package_name": "com.garpoo.kids_growth_plus"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "911288213854-46hoim4c6b92kejt8jnf3c9k3dvlb88q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDRdRg9FxMm3b3WM6tNDfE5fYVXekE4nIg"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911288213854-46hoim4c6b92kejt8jnf3c9k3dvlb88q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911288213854-ppmnfogcogfkktv53i5tamr1s8ncsarb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.garpoo.kidsGrowthPlus"
+              }
+            }
+          ]
         }
       }
     }

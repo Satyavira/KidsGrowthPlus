@@ -2,7 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>GIDClientID</key>
+    <string>911288213854-ppmnfogcogfkktv53i5tamr1s8ncsarb.apps.googleusercontent.com</string>
 	<key>CFBundleDevelopmentRegion</key>
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<string>com.googleusercontent.apps.911288213854-ppmnfogcogfkktv53i5tamr1s8ncsarb</string>
+    		</array>
+    	</dict>
+    </array>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Kids Growth Plus</string>
