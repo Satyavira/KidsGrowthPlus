@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kids_growth_plus/firebase_options.dart';
+import 'package:kids_growth_plus/provider/auth_provider.dart';
+import 'package:kids_growth_plus/ui/onboard/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,22 +11,27 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+          create: (BuildContext context) => AuthProvider(),
+          child: const KidsGrowthApp()
+      )
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class KidsGrowthApp extends StatelessWidget {
+  const KidsGrowthApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'KidsGrowth+',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Placeholder(),
+      home: const SplashScreen(),
     );
   }
 }
