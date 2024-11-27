@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kids_growth_plus/ui/auth/login_screen.dart';
 import 'package:kids_growth_plus/ui/auth/signup_intro_screen.dart';
 import 'package:kids_growth_plus/ui/widget/square_tile.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +71,7 @@ class LoginIntroScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginIntroScreen()),
+                              MaterialPageRoute(builder: (context) => const LoginScreen()),
                             );
                             print('Masuk Akun clicked!');
                           },
