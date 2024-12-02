@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kids_growth_plus/styles/colors.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/auth_provider.dart';
 import 'welcome_screen.dart';
 
 
@@ -27,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF00B3B7),
+      backgroundColor: green,
       body: Center(
         child: SvgPicture.asset(
           'assets/logo.svg',
