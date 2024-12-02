@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:kids_growth_plus/ui/main/child_profile_screen.dart';
+
+import '../../styles/colors.dart';
 
 class AddChildDataScreen extends StatefulWidget {
   const AddChildDataScreen({super.key});
@@ -58,6 +61,13 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
       if (!await file.exists()) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('The selected image file does not exist')),
+        );
+        return;
+      }
+      final fileSize = await file.length();
+      if (fileSize > 5 * 1024 * 1024) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image file is too large. Maximum size is 5MB.')),
         );
         return;
       }
@@ -159,8 +169,58 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
     }
   }
 
+  Future<void> _showConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must confirm
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Information'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Name: ${nameController.text}'),
+                Text('Gender: $gender'),
+                Text('Birth Date: $selectedDate'),
+                Text('Weight: ${weightController.text} Kg'),
+                Text('Height: ${heightController.text} Cm'),
+                Text('Address: ${addressController.text}'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () {
+                _submitForm(); // Submit the form after confirmation
+                Navigator.of(context).pop();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChildProfileScreen()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      if (selectedDate == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please select the child's birthdate.")),
+        );
+        return;
+      }
       print("Name: ${nameController.text}");
       print("Gender: $gender");
       print("Birth Date: $selectedDate");
@@ -168,6 +228,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
       print("Height: ${heightController.text} Cm");
       print("Address: ${addressController.text}");
       print("Photo Path: ${_selectedImage?.path ?? 'No photo selected'}");
+      _showConfirmationDialog();
     }
   }
 
@@ -269,7 +330,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                                     gender = value!;
                                   });
                                 },
-                                activeColor: const Color(0xFF002247),
+                                activeColor: darkBlue,
                               ),
                             ),
                             Expanded(
@@ -283,7 +344,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                                     gender = value!;
                                   });
                                 },
-                                activeColor: const Color(0xFF002247),
+                                activeColor: darkBlue,
                               ),
                             ),
                           ],
@@ -310,7 +371,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          const Icon(Icons.calendar_today, color: Color(0xFF002247)),
+                                          const Icon(Icons.calendar_today, color: darkBlue),
                                           Text(
                                             selectedDate ?? "xx/xx/xxxx",
                                             style: TextStyle(
@@ -336,7 +397,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                                   Container(
                                     height: 55,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF002247),
+                                      color: darkBlue,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: Row(
@@ -390,7 +451,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                                   Container(
                                     height: 55,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF002247),
+                                      color: darkBlue,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: Row(
@@ -472,7 +533,7 @@ class _AddChildDataScreenState extends State<AddChildDataScreen> {
                       child: ElevatedButton(
                         onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue[900],
+                          backgroundColor: darkBlue,
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
