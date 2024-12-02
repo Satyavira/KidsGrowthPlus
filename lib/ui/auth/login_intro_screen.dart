@@ -6,8 +6,8 @@ import 'package:kids_growth_plus/ui/auth/login_screen.dart';
 import 'package:kids_growth_plus/ui/auth/signup_intro_screen.dart';
 import 'package:kids_growth_plus/ui/widget/square_tile.dart';
 import 'package:provider/provider.dart';
-
 import '../../provider/auth_provider.dart';
+import '../../styles/colors.dart'; // Import the colors file
 
 class LoginIntroScreen extends StatelessWidget {
   const LoginIntroScreen({super.key});
@@ -36,7 +36,7 @@ class LoginIntroScreen extends StatelessWidget {
                   height: 380,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00B3B7),
+                    color: green, // Replaced with green variable
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40.0),  // Different radius for top-left
                       topRight: Radius.circular(40.0), // Different radius for top-right
@@ -53,7 +53,7 @@ class LoginIntroScreen extends StatelessWidget {
                           style: GoogleFonts.poppins(  // Apply Poppins font
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFF002247),
+                            color: darkBlue, // Replaced with darkBlue variable
                           ),
                           textAlign: TextAlign.left,
                         ),
@@ -63,7 +63,7 @@ class LoginIntroScreen extends StatelessWidget {
                           style: GoogleFonts.poppins(  // Apply Poppins font
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF002247),
+                            color: darkBlue, // Replaced with darkBlue variable
                           ),
                         ),
                         SizedBox(height: 8.0),
@@ -88,7 +88,7 @@ class LoginIntroScreen extends StatelessWidget {
                               style: GoogleFonts.nunitoSans(  // Apply Poppins font
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xFF002247),
+                                color: darkBlue, // Replaced with darkBlue variable
                               ),
                             ),
                           ),
@@ -104,7 +104,7 @@ class LoginIntroScreen extends StatelessWidget {
                                   thickness: 1,  // Line thickness
                                 ),
                               ),
-        
+
                               // Text in the middle
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -116,7 +116,7 @@ class LoginIntroScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-        
+
                               // Second Line (Divider or Container with height)
                               Expanded(
                                 child: Divider(
@@ -146,7 +146,7 @@ class LoginIntroScreen extends StatelessWidget {
                           children: [
                             // First Line (Divider or Container with height)
                             Spacer(),
-        
+
                             // Text in the middle
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -181,7 +181,7 @@ class LoginIntroScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-        
+
                             Spacer()
                           ],
                         ),
