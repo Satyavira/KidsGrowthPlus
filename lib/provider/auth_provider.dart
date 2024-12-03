@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kids_growth_plus/ui/main/add_child_data_screen.dart';
 
 import '../services/auth_service.dart';
 
@@ -10,15 +9,25 @@ class AuthProvider with ChangeNotifier {
   final Auth _auth = Auth();
   User? _user;
   User? get user => _user;
-  bool get isAuthenticated => _user != null;
+
+  bool _isAuthenticated = false;
+  bool get isAuthenticated => _isAuthenticated;
+
   bool _isEmailVerified = false;
   bool get isEmailVerified => _isEmailVerified;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   Timer? _timer;
 
   AuthProvider() {
     _auth.authStateChanges.listen((user) async {
       _user = user;
+      _isAuthenticated = user != null;
       if (_user != null) {
         _isEmailVerified = await _auth.checkEmailVerified();
       }
@@ -26,24 +35,44 @@ class AuthProvider with ChangeNotifier {
     });
   }
 
-  Future<void> signUp(String email, String password) async {
-    await _auth.signUpWithEmailAndPassword(email: email, password: password);
-    _user = _auth.currentUser;
-    notifyListeners();
+  Future<bool> signUp(String email, String password) async {
+    _setLoading(true);
+    try {
+      _errorMessage = null;
+      await _auth.signUpWithEmailAndPassword(email: email, password: password);
+      _user = _auth.currentUser;
+      _isAuthenticated = _user != null;
+      return _isAuthenticated;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _setLoading(false);
+    }
   }
 
-  Future<void> signInWithEmailAndPassword(BuildContext context, String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+    _setLoading(true);
     try {
-      User? user = await _auth.signInWithEmailAndPassword(email, password);
-      if (user != null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => AddChildDataScreen()),
-          (Route<dynamic> route) => false,
+      _errorMessage = null;
+      _user = await _auth.signInWithEmailAndPassword(email, password);
+      _isAuthenticated = _user != null;
+      if (user != null && !isEmailVerified) {
+        throw FirebaseAuthException(
+          code: 'email-not-verified',
+          message: 'Email is not verified. Please check your inbox.',
         );
       }
+      return _isAuthenticated;
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is FirebaseAuthException && e.code == 'email-not-verified') {
+        _errorMessage = e.message;
+        return false;
+      }
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _setLoading(false);
     }
   }
 
@@ -60,32 +89,56 @@ class AuthProvider with ChangeNotifier {
     });
   }
 
+  Future<void> resendVerificationEmail() async {
+    try {
+      print('resend verification email');
+      await _auth.resendVerificationEmail();
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
 
-  Future<void> signInWithGoogle(BuildContext context) async {
+  Future<bool> signInWithGoogle(BuildContext context) async {
     try {
-      User? user = await _auth.signInWithGoogle();
+      _errorMessage = null;
+      // User? user = await _auth.signInWithGoogle();
       if (user != null) {
-        bool userExists = await _auth.doesUserExist(user.uid);
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => AddChildDataScreen()),
-              (Route<dynamic> route) => false,
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Google Sign-In failed")),
-        );
+        _user = user;
+        _isAuthenticated = true;
+        return true;
       }
+      return false;
     } catch (e) {
-      if (kDebugMode) {
-        print("Error during Google Sign-In: $e");
-      }
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      notifyListeners();
     }
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+    _user = null;
+    _isAuthenticated = false;
+    notifyListeners();
+  }
+
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
   }
 
 }
