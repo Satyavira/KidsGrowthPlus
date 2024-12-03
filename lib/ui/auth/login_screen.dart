@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/auth_provider.dart';
+import '../../styles/colors.dart';
+import '../main/add_child_data_screen.dart'; // Import the colors file
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,57 +61,70 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Stack(
           children: [
             SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Logo Section
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: SvgPicture.asset(
-                        'assets/logo_color.svg',
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.contain,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Logo Section
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SvgPicture.asset(
+                          'assets/logo_color.svg',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
 
-                  const SizedBox(height: 16),
-
-                  // Email Field
-                  const Text("Email"),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your email",
-                      border: UnderlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    // Email Field
+                    const Text("Email"),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your email",
+                        border: UnderlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  // Password Field
-                  const Text("Password"),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your password",
-                      border: UnderlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    // Password Field
+                    const Text("Password"),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your password",
+                        border: UnderlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      ),
+                      obscureText: true,
                     ),
-                    obscureText: true,
-                  ),
-                ],
+                    if (authProvider.errorMessage != null)
+                      Text(
+                        authProvider.errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    if (authProvider.errorMessage != null && authProvider.errorMessage!.contains('not verified'))
+                      TextButton(
+                        onPressed: authProvider.resendVerificationEmail,
+                        child: const Text('Resend Verification Email'),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
+            if (authProvider.isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -117,29 +132,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: isLoading
+                    onPressed: authProvider.isLoading
                         ? null
                         : () async {
-                      setState(() {
-                        isLoading = true;
-                      });
                       if (validateForm()) {
                         String email = _emailController.text;
                         String password = _passwordController.text;
-                
+
                         try {
-                          await authProvider.signInWithEmailAndPassword(
-                              context, email.trim(), password.trim());
+                          if (await authProvider.signInWithEmailAndPassword(
+                              email.trim(), password.trim())) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => AddChildDataScreen()),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
                         } catch (e) {
                           showError("Failed to sign in: ${e.toString()}");
                         }
                       }
-                      setState(() {
-                        isLoading = false;
-                      });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF002247),
+                      backgroundColor: darkBlue,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -160,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-          ]
+          ],
         ),
       ),
     );
