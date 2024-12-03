@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kids_growth_plus/ui/auth/login_intro_screen.dart';
-import 'package:kids_growth_plus/ui/main/add_child_data_screen.dart';
-import 'package:kids_growth_plus/ui/main/child_profile_screen.dart';
 import '../../styles/colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -14,6 +12,18 @@ class WelcomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  'assets/two_doctor.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -67,18 +77,6 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  'assets/two_doctor.png',
-                  fit: BoxFit.cover,
-                ),
               ),
             ),
           ],
