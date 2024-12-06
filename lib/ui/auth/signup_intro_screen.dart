@@ -8,7 +8,8 @@ import 'package:kids_growth_plus/ui/widget/square_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/auth_provider.dart';
-import '../../styles/colors.dart'; // Import the colors file
+import '../../styles/colors.dart';
+import '../main/add_child_data_screen.dart'; // Import the colors file
 
 class SignupIntroScreen extends StatelessWidget {
   const SignupIntroScreen({super.key});
@@ -135,7 +136,13 @@ class SignupIntroScreen extends StatelessWidget {
                             children: [
                               InkWell(
                                   onTap: () async {
-                                    await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context);
+                                    if (await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context)) {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const AddChildDataScreen()),
+                                            (Route<dynamic> route) => false,
+                                      );
+                                    }
                                     // Define your action here
                                     print('Google Button clicked!');
                                   },
